@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Replication of ALT attribute issues in Chrome</title>
+</head>
+<body>
+    <h1>Chromium Alt Text Replication Issue</h1>    
+    <h2>1. Original Markup Contains Full Alt Text</h2>
+    <p><code>&lt;img src=&quot;sunCat.jpg&quot; alt=&quot;A cat lying in the sun on a green chair.&quot; /&gt;</code></p>
+    <img src="sunCat.jpg" alt="A cat lying in the sun on a green chair." />
+    <h2>2. Original Markup Contains Blank String Alt Text</h2>
+    <p><code>&lt;img src=&quot;sunCat.jpg&quot; alt=&quot;&quot; /&gt;</code></p>
+    <img src="sunCat.jpg" alt="" />
+    <h2>3. Original Markup Contains Alt Attribute with no Value</h2>
+    <p><code>&lt;img src=&quot;sunCat.jpg&quot; alt /&gt;</code></p>
+    <img src="sunCat.jpg" alt />
+</body>
+</html>
