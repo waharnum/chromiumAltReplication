@@ -1,18 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Replication of ALT attribute issues in Chrome</title>
 </head>
 <body>
-    <h1>Chromium Alt Text Replication Issue</h1>    
-    <h2>1. Original Markup Contains Full Alt Text</h2>
-    <p><code>&lt;img src=&quot;sunCat.jpg&quot; alt=&quot;A cat lying in the sun on a green chair.&quot; /&gt;</code></p>
-    <img src="sunCat.jpg" alt="A cat lying in the sun on a green chair." />
-    <h2>2. Original Markup Contains Blank String Alt Text</h2>
-    <p><code>&lt;img src=&quot;sunCat.jpg&quot; alt=&quot;&quot; /&gt;</code></p>
+    <h1>Chrome Alt Attribute Null Text Issue - Replication Page</h1>
+    <h2>Explanation</h2>
+    <p>
+        This page exists to demonstrate an issue in recent builds of Chrome (tested on 57.0.2987.133 on OS X, but existing in previous builds as well since at least the 56 series, as well as on Windows) with how Chrome interprets ALT attributes with empty string values. </p>
+
+        <p>
+
+        Providing an empty ALT attribute in the style of <code>alt=&quot;&quot;</code> is the recommended best practice for purely decorative images that ATs should ignore. See <a href="https://www.w3.org/TR/WCAG20-TECHS/H67.html">Techniques for WCAG 2.0 - H67: Using null alt text and no title attribute on img elements for images that AT should ignore</a>.</p>
+
+        <p>
+        Recent builds of Chrome (and Safari - this may be a Webkit-originating issue) appear to render <code>alt=""</code> (blank value) as <code>alt</code> (no value) when parsing HTML source. This causes at least two issues, along with being an incorrect rendering of the ALT attribute as a binary attribute (the ALT attribute must have a value, even if it is a blank one):
+        <ol>
+            <li>
+                Some screenreaders behave incorrectly, behaving as though the ALT attribute is not present and reading the image file name (VoiceOver on OS X exhibits this behaviour when used with Chrome).
+            </li>
+            <li>
+                It is no longer possible to distinguish a correct use of the ALT attribute when the image is purely decorative (an empty string) from an incorrect use of the ALT attribute when inspecting the rendered markup using dev tools INSPECT or similar. Web accessibility specialists typically check rendered source code using development tools in Chrome and other browsers rather than the raw page source code - this is necessary as page markup is rendered and manipulated with Javascript.
+            </li>
+        </ol>
+        </p>
+<h2>Seeing the Issue</h2>
+<p>
+    Seeing the issue is easiest by inspecting the page HTML source code side by side with the HTML as rendered by Chrome (via Right Click -> Inspect). Images #2 and #3 have different use of ALT in the page HTML source code for the images, but are rendered identically by Chrome.
+</p>
+<p>
+    This is a static page without any use of Javascript to be able to demonstrate the issue in the simplest context possible.
+</p>
+
+    <h3>1. Original Markup Contains Full Alt Text</h3>
+    <p>ORIGINAL MARKUP: <code>&lt;img src=&quot;sunCat.jpg&quot; alt=&quot;A fluffy brown cat lying in the sun on a green chair.&quot; /&gt;</code></p>
+    <p>RENDERED MARKUP: <code>&lt;img src=&quot;sunCat.jpg&quot; alt=&quot;A fluffy brown cat lying in the sun on a green chair.&quot; /&gt;</code></p>
+    <p>
+    <strong>Comment:</strong> Chrome displays expected behaviour.
+    </p>
+    <img src="sunCat.jpg" alt="A fluffy brown cat lying in the sun on a green chair." />
+    <h3>2. Original Markup Contains Blank String Alt Text</h3>
+    <p>ORIGINAL MARKUP: <code>&lt;img src=&quot;sunCat.jpg&quot; alt=&quot;&quot; /&gt;</code></p>
+    <p>RENDERED MARKUP: <code>&lt;img src=&quot;sunCat.jpg&quot; alt /&gt;</code></p>
+    <p>
+    <strong>Comment:</strong> Chrome displays unexpected behaviour: it renders only an <code>alt</code> attribute with no corresponding value.
+    </p>
     <img src="sunCat.jpg" alt="" />
-    <h2>3. Original Markup Contains Alt Attribute with no Value</h2>
-    <p><code>&lt;img src=&quot;sunCat.jpg&quot; alt /&gt;</code></p>
+    <h3>3. Original Markup Contains Alt Attribute with no Value</h3>
+    <p>ORIGINAL MARKUP: <code>&lt;img src=&quot;sunCat.jpg&quot; alt /&gt;</code></p>
+    <p>RENDERED MARKUP: <code>&lt;img src=&quot;sunCat.jpg&quot; alt /&gt;</code></p>
+    <p>
+    <strong>Comment:</strong> Chrome displays expected behaviour here.
+    </p>
     <img src="sunCat.jpg" alt />
 </body>
 </html>
